@@ -42,7 +42,7 @@ DATAV	= database
 WEBV	= wordpress
 
 all:
-	$(COMPOSE) -f $(YMAL) up
+	$(COMPOSE) -f $(YMAL) up 
 .PHONY: all
 
 clean:
