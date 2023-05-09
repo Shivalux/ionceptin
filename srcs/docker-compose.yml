@@ -9,11 +9,8 @@ services:
       - ./.env
     volumes:
       - database:/var/lib/mysql/
-      # - /home/sharnvon/data/:/var/lib/mysql/
     networks:
       - inception
-    # ports:
-    #   - "8086:3306"
     restart: always
   # docker run --name wordpress --env-file ../../.env -v websit:/var/www/wordpress/ --network=hello-network --rm -it testwordpress
   wordpress:
@@ -26,14 +23,9 @@ services:
       - wordpress:/var/www/wordpress/
     networks:
       - inception
-    ports:
-      - "9000:9000"
-    # ports:
-    #   - "8181:80"
     restart: always
     depends_on:
       - mariadb
-
   #docker run --name nginx --env-file ../../.env -v websit:/var/www/wordpress/ --network=hello-network --cap-add=NET_ADMIN -p 9000:9000 -p 8080:80 --rm -it testnginx
   nginx:
     container_name: "nginx"
@@ -46,24 +38,17 @@ services:
     networks:
       - inception
     ports:
-      - "8080:80"
-      - "8443:443"
-    # cap_add:
-    #   - NET_ADMIN
+      - "80:80"
+      - "443:443"
     restart: always
     depends_on:
       - wordpress
       - mariadb
-
-    # tty: true
-    # stdin_open: true
-
   # adminer:
   #   image: adiminer
   #   restart: always
   #   ports:
   #     - 8080:8080
-
 
 volumes:
   database:
