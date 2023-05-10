@@ -1,7 +1,17 @@
-# * defual_port  = 3306
 FROM	debian:buster
+
+ARG     MYSQL_NAME
+ARG		MYSQL_ROOTPASS
+ARG		MYSQL_USERNAME_ADMIN
+ARG		MYSQL_PASSWORD_ADMIN
+ARG		MYSQL_USERNAME
+ARG		MYSQL_PASSWORD
+
 WORKDIR /app
-COPY	mariadb_script.sh .
+
+COPY	./tools/mariadb_script.sh .
+
 RUN		chmod 777 mariadb_script.sh;
-EXPOSE		3306
-ENTRYPOINT	bash mariadb_script.sh;
+RUN		bash mariadb_script.sh && rm mariadb_script.sh
+
+ENTRYPOINT	[ "mysqld" ]

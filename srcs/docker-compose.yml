@@ -5,10 +5,16 @@ services:
     container_name: 'mariadb'
     build:
       context: ./requirements/mariadb/
-    env_file:
-      - ./.env
+      args:
+        MYSQL_NAME: ${MYSQL_NAME}
+        MYSQL_ROOTPASS: ${MYSQL_ROOTPASS}
+        MYSQL_USERNAME_ADMIN: ${MYSQL_USERNAME_ADMIN}
+        MYSQL_PASSWORD_ADMIN: ${MYSQL_PASSWORD_ADMIN}
+        MYSQL_USERNAME: ${MYSQL_USERNAME}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - database:/var/lib/mysql/
+      # - debuglog:/var/log/
     networks:
       - inception
     restart: always
@@ -53,8 +59,26 @@ services:
 volumes:
   database:
     name: database
+    driver: local
+    driver_opts:
+      type: none
+      o: "bind"
+      # device: $HOME/data/database
+      device: /Users/shivarakii/Documents/42_coding/inception/srcs/data/database/
   wordpress:
     name: wordpress
+    driver: local
+    driver_opts:
+      type: none
+      o: "bind"
+      # device: $HOME/data/wordpress
+      device: /Users/shivarakii/Documents/42_coding/inception/srcs/data/wordpress/
+  # debuglog:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: /Users/shivarakii/Documents/42_coding/inception/logs
+  #     o: bind
 
 networks:
   inception:
