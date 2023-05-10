@@ -1,6 +1,5 @@
 version: '3.8'
 services:
-  # docker run --name mariadb --env-file ../../.env -v database:/var/lib/mysql/ --network=hello-network --rm testmariadb
   mariadb:
     container_name: 'mariadb'
     build:
@@ -14,17 +13,29 @@ services:
         MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - database:/var/lib/mysql/
-      # - debuglog:/var/log/
     networks:
       - inception
     restart: always
-  # docker run --name wordpress --env-file ../../.env -v websit:/var/www/wordpress/ --network=hello-network --rm -it testwordpress
   wordpress:
     container_name: 'wordpress'
     build:
       context: ./requirements/wordpress/
-    env_file:
-      - ./.env
+      args:
+        MYSQL_NAME: ${MYSQL_NAME}
+        MYSQL_USERNAME_ADMIN: ${MYSQL_USERNAME_ADMIN}
+        MYSQL_PASSWORD_ADMIN: ${MYSQL_PASSWORD_ADMIN}
+        MYSQL_HOST: ${MYSQL_HOST}
+        WEB_TITLE: ${WEB_TITLE}
+        WEB_EMAIL: ${WEB_EMAIL}
+        DOMAIN_NAME: ${DOMAIN_NAME}
+    environment:
+      MYSQL_NAME: ${MYSQL_NAME}
+      MYSQL_USERNAME_ADMIN: ${MYSQL_USERNAME_ADMIN}
+      MYSQL_PASSWORD_ADMIN: ${MYSQL_PASSWORD_ADMIN}
+      MYSQL_HOST: ${MYSQL_HOST}
+      WEB_TITLE: ${WEB_TITLE}
+      WEB_EMAIL: ${WEB_EMAIL}
+      DOMAIN_NAME: ${DOMAIN_NAME}
     volumes:
       - wordpress:/var/www/wordpress/
     networks:
@@ -32,9 +43,8 @@ services:
     restart: always
     depends_on:
       - mariadb
-  #docker run --name nginx --env-file ../../.env -v websit:/var/www/wordpress/ --network=hello-network --cap-add=NET_ADMIN -p 9000:9000 -p 8080:80 --rm -it testnginx
   nginx:
-    container_name: "nginx"
+    container_name: 'nginx'
     build:
       context: ./requirements/nginx
     env_file:
