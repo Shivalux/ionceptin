@@ -47,8 +47,8 @@ services:
     container_name: 'nginx'
     build:
       context: ./requirements/nginx
-    env_file:
-      - .env
+      args:
+        DOMAIN_NAME: ${DOMAIN_NAME}
     volumes:
       - wordpress:/var/www/wordpress/
     networks:
@@ -83,12 +83,6 @@ volumes:
       o: "bind"
       # device: $HOME/data/wordpress
       device: /Users/shivarakii/Documents/42_coding/inception/srcs/data/wordpress/
-  # debuglog:
-  #   driver: local
-  #   driver_opts:
-  #     type: none
-  #     device: /Users/shivarakii/Documents/42_coding/inception/logs
-  #     o: bind
 
 networks:
   inception:
