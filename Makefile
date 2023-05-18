@@ -1,8 +1,24 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: sharnvon <sharnvon@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/05/13 20:59:35 by sharnvon          #+#    #+#              #
+#    Updated: 2023/05/17 16:02:48 by sharnvon         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME	= inception
 COMPOSE = docker-compose
 NGINX	= nginx
 MARIA	= mariadb
 WPRES	= wordpress
+REDIS	= redis
+ADMIN	= adminer
+STWEB	= static_webpage
+VSFTP	= ftp_server
 YML		= ./srcs/docker-compose.yml
 DATAV	= database
 WEBV	= wordpress
@@ -14,34 +30,41 @@ BLUE	= \033[1;36m
 RED		= \033[1;31m
 
 $(NAME):
+	# mkdir /Users/shivarakii/Documents/42_coding/inception/srcs/data
+	mkdir -p /Users/shivarakii/Documents/42_coding/inception/srcs/data/database
+	mkdir -p /Users/shivarakii/Documents/42_coding/inception/srcs/data/wordpress
 	# mkdir -p $HOME/data/
 	# mkdir -p $HOME/data/database/
 	# mkdir -p $HOME/data/wordpress/
 
 all: $(NAME)
-	$(COMPOSE) -f $(YML) up -d 
+	$(COMPOSE) -f $(YML) up -d up
 	@echo "$(GREEN)-----:: success :: all containers are up ::-----$(NORMAL)"
 up:
-	$(COMPOSE) -f $(YML) up -d
-	@echo "$(GREEN)-----:: success :: all containers are up ::-----$(NORMAL)"
-force:
-	$(COMPOSE) -f $(YML) up -d --build
+	$(COMPOSE) -f $(YML) up -d up
 	@echo "$(GREEN)-----:: success :: all containers are up ::-----$(NORMAL)"
 .PHONY: all up
 
 console:
-	$(COMPOSE) -f $(YML) up
+	mkdir -p /Users/shivarakii/Documents/42_coding/inception/srcs/data
+	mkdir -p /Users/shivarakii/Documents/42_coding/inception/srcs/data/database
+	mkdir -p /Users/shivarakii/Documents/42_coding/inception/srcs/data/wordpress
+	$(COMPOSE) -f $(YML) up --quiet-pull --build
 .PHONY: console
 
-check:
+list:
+	@echo "$(GREEN)-----:: list :: all containers ::-----$(NORMAL)"
 	@docker ps -a
 	@echo
+	@echo "$(GREEN)-----:: list :: all images ::-----$(NORMAL)"
 	@docker images
 	@echo
+	@echo "$(GREEN)-----:: list :: all networks ::-----$(NORMAL)"
 	@docker network list
 	@echo
+	@echo "$(GREEN)-----:: list :: all volumes ::-----$(NORMAL)"
 	@docker volume list
-.PHONY: check
+.PHONY: list
 
 clean:
 	$(COMPOSE) -f $(YML) down
@@ -52,19 +75,23 @@ down:
 .PHONY: clean down
 
 fclean: clean
-	rm -rf /Users/shivarakii/Documents/42_coding/inception/srcs/data/database/*
-	rm -rf /Users/shivarakii/Documents/42_coding/inception/srcs/data/wordpress/*
+	rm -rf /Users/shivarakii/Documents/42_coding/inception/srcs/data/
+	# rm -rf /$HOME/data/
 	docker volume rm $(DATAV)
 	docker volume rm $(WEBV)
-	# rm -rf /$HOME/data/database/*
-	# rm -rf /$HOME/data/wordpress/*
 	@echo "$(ORANGE)-----:: fclean :: all volumes are deleted ::-----$(NORMAL)"
-	docker rmi srcs-$(MARIA)
-	docker rmi srcs-$(WPRES)
-	docker rmi srcs-$(NGINX)
+	docker rmi $(MARIA)
+	docker rmi $(WPRES)
+	docker rmi $(NGINX)
+	docker rmi $(REDIS)
+	docker rmi $(ADMIN)
+	docker rmi $(STWEB)
+	docker rmi $(VSFTP)
 	@echo "$(RED)-----:: fclean :: all images are deleted ::-----$(NORMAL)"
 .PHONY: fclean
 
-re: fclean all
+re: fclean console #all
 .PHONY: re
 
+bonus: all
+.PHONY: bonus

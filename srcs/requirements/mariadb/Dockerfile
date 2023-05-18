@@ -13,5 +13,6 @@ COPY	./tools/mariadb_script.sh .
 
 RUN		chmod 777 mariadb_script.sh;
 RUN		bash mariadb_script.sh && rm mariadb_script.sh
+EXPOSE	3306
 
 ENTRYPOINT	[ "mysqld" ]

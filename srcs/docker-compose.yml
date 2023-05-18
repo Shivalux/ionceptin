@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   mariadb:
     container_name: 'mariadb'
@@ -11,6 +12,7 @@ services:
         MYSQL_PASSWORD_ADMIN: ${MYSQL_PASSWORD_ADMIN}
         MYSQL_USERNAME: ${MYSQL_USERNAME}
         MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    image: 'mariadb'
     volumes:
       - database:/var/lib/mysql/
     networks:
@@ -28,6 +30,7 @@ services:
         WEB_TITLE: ${WEB_TITLE}
         WEB_EMAIL: ${WEB_EMAIL}
         DOMAIN_NAME: ${DOMAIN_NAME}
+    image: 'wordpress'
     environment:
       MYSQL_NAME: ${MYSQL_NAME}
       MYSQL_USERNAME_ADMIN: ${MYSQL_USERNAME_ADMIN}
@@ -43,12 +46,14 @@ services:
     restart: always
     depends_on:
       - mariadb
+      - redis
   nginx:
     container_name: 'nginx'
     build:
       context: ./requirements/nginx
       args:
         DOMAIN_NAME: ${DOMAIN_NAME}
+    image: 'nginx'
     volumes:
       - wordpress:/var/www/wordpress/
     networks:
@@ -60,11 +65,62 @@ services:
     depends_on:
       - wordpress
       - mariadb
-  # adminer:
-  #   image: adiminer
-  #   restart: always
-  #   ports:
-  #     - 8080:8080
+  redis:
+    container_name: 'redis'
+    image: 'redis'
+    build:
+      context: ./requirements/bonus/redis/
+    networks:
+      - inception
+    restart: always
+    depends_on:
+      - mariadb
+  adminer:
+    container_name: 'adminer'
+    build:
+      context: ./requirements/bonus/adminer
+    image: 'adminer'
+    volumes:
+      - wordpress:/var/www/wordpress
+    networks:
+      - inception
+    depends_on:
+      - wordpress
+      - nginx
+  static-webpage:
+    container_name: 'static_webpage'
+    build:
+      context: ./requirements/bonus/static_webpage
+    image: 'static_webpage'
+    volumes:
+      - wordpress:/var/www/wordpress/
+    networks:
+      - inception
+    depends_on:
+      - adminer
+  ftp_server:
+    container_name: 'ftp_server'
+    build:
+      context: ./requirements/bonus/ftp_server
+      args:
+        MYSQL_USERNAME_ADMIN: ${MYSQL_USERNAME_ADMIN}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    environment:
+      USERNAME: ${MYSQL_USERNAME_ADMIN}
+      PASSWORD: ${MYSQL_PASSWORD}
+    image: 'ftp_server'
+    volumes:
+      - wordpress:/var/www/wordpress/
+    ports:
+      - '20:20'
+      - '21:21'
+      - '22:22'
+      - '990:990'
+      - '40000-40009:40000-40009'
+    networks:
+      - inception
+    depends_on:
+      - wordpress
 
 volumes:
   database:
@@ -83,6 +139,7 @@ volumes:
       o: "bind"
       # device: $HOME/data/wordpress
       device: /Users/shivarakii/Documents/42_coding/inception/srcs/data/wordpress/
+  # adminer:
 
 networks:
   inception:

@@ -14,6 +14,7 @@ RUN 	apt update && apt upgrade -y
 RUN		apt -y install curl \
 		vim telnet \
 		mariadb-client \
+		redis-server \
 		php \
 		php-common \
 		php-cli \
@@ -44,4 +45,3 @@ RUN		wp-cli core download --allow-root;
 EXPOSE	9000
 
 ENTRYPOINT	bash /app/wordpress_script.sh && php-fpm7.3 -F -R
-# ENTRYPOINT	[ "bash", "/app/wordpress_script.sh", ";", "php-fpm7.3", "-F", "-R" ]
