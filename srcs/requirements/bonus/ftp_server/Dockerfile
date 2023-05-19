@@ -15,4 +15,3 @@ EXPOSE	990
 EXPOSE	40000-40009
 
 ENTRYPOINT [ "bash", "ftp_server_script.sh" ]
-# ENTRYPOINT [ "sleep", "infinity" ]

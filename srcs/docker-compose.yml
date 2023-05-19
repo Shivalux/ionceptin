@@ -67,9 +67,9 @@ services:
       - mariadb
   redis:
     container_name: 'redis'
-    image: 'redis'
     build:
       context: ./requirements/bonus/redis/
+    image: 'redis'
     networks:
       - inception
     restart: always
@@ -105,10 +105,10 @@ services:
       args:
         MYSQL_USERNAME_ADMIN: ${MYSQL_USERNAME_ADMIN}
         MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    image: 'ftp_server'
     environment:
       USERNAME: ${MYSQL_USERNAME_ADMIN}
       PASSWORD: ${MYSQL_PASSWORD}
-    image: 'ftp_server'
     volumes:
       - wordpress:/var/www/wordpress/
     ports:
@@ -139,7 +139,6 @@ volumes:
       o: "bind"
       # device: $HOME/data/wordpress
       device: /Users/shivarakii/Documents/42_coding/inception/srcs/data/wordpress/
-  # adminer:
 
 networks:
   inception:
