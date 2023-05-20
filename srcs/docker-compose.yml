@@ -59,8 +59,8 @@ services:
     networks:
       - inception
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     restart: always
     depends_on:
       - wordpress
@@ -117,6 +117,17 @@ services:
       - '22:22'
       - '990:990'
       - '40000-40009:40000-40009'
+    networks:
+      - inception
+    depends_on:
+      - wordpress
+  prometheus:
+    container_name: 'prometheus'
+    build:
+      context: ./requirements/bonus/prometheus
+    image: 'prometheus'
+    ports:
+      - '9090:9090'
     networks:
       - inception
     depends_on:

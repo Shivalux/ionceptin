@@ -6,7 +6,7 @@
 #    By: sharnvon <sharnvon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/13 20:59:35 by sharnvon          #+#    #+#              #
-#    Updated: 2023/05/17 16:02:48 by sharnvon         ###   ########.fr        #
+#    Updated: 2023/05/20 04:00:26 by sharnvon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ REDIS	= redis
 ADMIN	= adminer
 STWEB	= static_webpage
 VSFTP	= ftp_server
+PROME	= prometheus
 YML		= ./srcs/docker-compose.yml
 DATAV	= database
 WEBV	= wordpress
@@ -87,6 +88,7 @@ fclean: clean
 	docker rmi $(ADMIN)
 	docker rmi $(STWEB)
 	docker rmi $(VSFTP)
+	docker rmi $(PROME)
 	@echo "$(RED)-----:: fclean :: all images are deleted ::-----$(NORMAL)"
 .PHONY: fclean
 
