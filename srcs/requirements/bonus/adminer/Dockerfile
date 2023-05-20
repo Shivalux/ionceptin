@@ -8,6 +8,4 @@ RUN		mkdir /var/run/php;
 
 EXPOSE 9000
 
-ENTRYPOINT	wget https://www.adminer.org/latest.php && \
-			mv latest.php index.php; \
-			php-fpm7.3 -F -R;
+ENTRYPOINT	wget https://www.adminer.org/latest.php && mv latest.php index.php;
