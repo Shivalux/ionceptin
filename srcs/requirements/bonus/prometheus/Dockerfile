@@ -26,6 +26,7 @@ RUN		sudo chown -R prometheus:prometheus /etc/prometheus/console_libraries;
 RUN		sudo chown prometheus:prometheus /etc/prometheus/prometheus.yml;
 RUN		sudo systemctl daemon-reload;
 RUN		sudo systemctl start prometheus;
+e
 
 EXPOSE	9090
 
