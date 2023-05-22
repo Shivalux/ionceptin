@@ -10,6 +10,8 @@ COPY	./conf/vsftpd.conf /etc/vsftpd.conf
 
 EXPOSE	20
 EXPOSE	21
+EXPOSE	22
+EXPOSE	990
 EXPOSE	40000-40009
 
 ENTRYPOINT [ "bash", "ftp_server_script.sh" ]
