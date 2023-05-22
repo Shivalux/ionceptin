@@ -32,22 +32,24 @@ ORANGE	= \033[1;33m
 BLUE	= \033[1;36m
 RED		= \033[1;31m
 
-$(NAME):
-	mkdir -p ${HOME}/data/
-	mkdir -p ${HOME}/data/database/
-	mkdir -p ${HOME}/data/wordpress/
 
 all: $(NAME)
-	$(COMPOSE) -f $(YML) up -d up --quiet-pull --build
+	$(COMPOSE) -f $(YML) up -d --quiet-pull --build
 	@echo "$(GREEN)-----:: success :: all containers are up ::-----$(NORMAL)"
 up:
-	$(COMPOSE) -f $(YML) up -d up --quiet-pull --build
+	$(COMPOSE) -f $(YML) up -d --quiet-pull --build
 	@echo "$(GREEN)-----:: success :: all containers are up ::-----$(NORMAL)"
 .PHONY: all up
 
 console: $(NAME)
 	$(COMPOSE) -f $(YML) up --quiet-pull --build
 .PHONY: console
+
+$(NAME):
+	@mkdir -p ${HOME}/data/
+	@mkdir -p ${HOME}/data/database/
+	@mkdir -p ${HOME}/data/wordpress/
+	@echo "$(GREEN)-----:: success :: make directories ::-----$(NORMAL)"
 
 list:
 	@echo "$(GREEN)-----:: list :: all containers ::-----$(NORMAL)"
@@ -72,7 +74,8 @@ down:
 .PHONY: clean down
 
 fclean: clean
-	sudo rm -rf ${HOME}/data/
+	@sudo rm -rf ${HOME}/data/
+	@echo "$(ORANGE)-----:: fclean :: all directories are deleted ::-----$(NORMAL)"
 	docker volume rm $(DATAV)
 	docker volume rm $(WEBV)
 	@echo "$(ORANGE)-----:: fclean :: all volumes are deleted ::-----$(NORMAL)"
