@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 NAME	= inception
-COMPOSE = docker-compose
+COMPOSE = docker compose
 NGINX	= nginx
 MARIA	= mariadb
 WPRES	= wordpress
@@ -23,6 +23,8 @@ PROME	= prometheus
 YML		= ./srcs/docker-compose.yml
 DATAV	= database
 WEBV	= wordpress
+TAG_MENDA	= inception
+TAG_BONUS	= inception_bonus
 
 NORMAL	= \033[0m
 GREEN	= \033[1;32m
@@ -31,12 +33,9 @@ BLUE	= \033[1;36m
 RED		= \033[1;31m
 
 $(NAME):
-	# mkdir /Users/shivarakii/Documents/42_coding/inception/srcs/data
-	mkdir -p /Users/shivarakii/Documents/42_coding/inception/srcs/data/database
-	mkdir -p /Users/shivarakii/Documents/42_coding/inception/srcs/data/wordpress
-	# mkdir -p $HOME/data/
-	# mkdir -p $HOME/data/database/
-	# mkdir -p $HOME/data/wordpress/
+	mkdir -p ${HOME}/data/
+	mkdir -p ${HOME}/data/database/
+	mkdir -p ${HOME}/data/wordpress/
 
 all: $(NAME)
 	$(COMPOSE) -f $(YML) up -d up
@@ -46,10 +45,7 @@ up:
 	@echo "$(GREEN)-----:: success :: all containers are up ::-----$(NORMAL)"
 .PHONY: all up
 
-console:
-	mkdir -p /Users/shivarakii/Documents/42_coding/inception/srcs/data
-	mkdir -p /Users/shivarakii/Documents/42_coding/inception/srcs/data/database
-	mkdir -p /Users/shivarakii/Documents/42_coding/inception/srcs/data/wordpress
+console: $(NAME)
 	$(COMPOSE) -f $(YML) up --quiet-pull --build
 .PHONY: console
 
@@ -76,23 +72,22 @@ down:
 .PHONY: clean down
 
 fclean: clean
-	rm -rf /Users/shivarakii/Documents/42_coding/inception/srcs/data/
-	# rm -rf /$HOME/data/
+	sudo rm -rf ${HOME}/data/
 	docker volume rm $(DATAV)
 	docker volume rm $(WEBV)
 	@echo "$(ORANGE)-----:: fclean :: all volumes are deleted ::-----$(NORMAL)"
-	docker rmi $(MARIA)
-	docker rmi $(WPRES)
-	docker rmi $(NGINX)
-	docker rmi $(REDIS)
-	docker rmi $(ADMIN)
-	docker rmi $(STWEB)
-	docker rmi $(VSFTP)
-	docker rmi $(PROME)
+	docker rmi $(MARIA):$(TAG_MENDA)
+	docker rmi $(WPRES):$(TAG_MENDA)
+	docker rmi $(NGINX):$(TAG_MENDA)
+	docker rmi $(REDIS):$(TAG_BONUS)
+	docker rmi $(ADMIN):$(TAG_BONUS)
+	docker rmi $(STWEB):$(TAG_BONUS)
+	docker rmi $(VSFTP):$(TAG_BONUS)
+	docker rmi $(PROME):$(TAG_BONUS)
 	@echo "$(RED)-----:: fclean :: all images are deleted ::-----$(NORMAL)"
 .PHONY: fclean
 
-re: fclean console #all
+re: fclean all
 .PHONY: re
 
 bonus: all

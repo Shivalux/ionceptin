@@ -12,7 +12,7 @@ services:
         MYSQL_PASSWORD_ADMIN: ${MYSQL_PASSWORD_ADMIN}
         MYSQL_USERNAME: ${MYSQL_USERNAME}
         MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    image: 'mariadb'
+    image: 'mariadb:inception'
     volumes:
       - database:/var/lib/mysql/
     networks:
@@ -30,7 +30,7 @@ services:
         WEB_TITLE: ${WEB_TITLE}
         WEB_EMAIL: ${WEB_EMAIL}
         DOMAIN_NAME: ${DOMAIN_NAME}
-    image: 'wordpress'
+    image: 'wordpress:inception'
     environment:
       MYSQL_NAME: ${MYSQL_NAME}
       MYSQL_USERNAME_ADMIN: ${MYSQL_USERNAME_ADMIN}
@@ -53,7 +53,7 @@ services:
       context: ./requirements/nginx
       args:
         DOMAIN_NAME: ${DOMAIN_NAME}
-    image: 'nginx'
+    image: 'nginx:inception'
     volumes:
       - wordpress:/var/www/wordpress/
     networks:
@@ -69,7 +69,7 @@ services:
     container_name: 'redis'
     build:
       context: ./requirements/bonus/redis/
-    image: 'redis'
+    image: 'redis:inception_bonus'
     networks:
       - inception
     restart: always
@@ -79,7 +79,7 @@ services:
     container_name: 'adminer'
     build:
       context: ./requirements/bonus/adminer
-    image: 'adminer'
+    image: 'adminer:inception_bonus'
     volumes:
       - wordpress:/var/www/wordpress
     networks:
@@ -91,7 +91,7 @@ services:
     container_name: 'static_webpage'
     build:
       context: ./requirements/bonus/static_webpage
-    image: 'static_webpage'
+    image: 'static_webpage:inception_bonus'
     volumes:
       - wordpress:/var/www/wordpress/
     networks:
@@ -105,7 +105,7 @@ services:
       args:
         MYSQL_USERNAME_ADMIN: ${MYSQL_USERNAME_ADMIN}
         MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    image: 'ftp_server'
+    image: 'ftp_server:inception_bonus'
     environment:
       USERNAME: ${MYSQL_USERNAME_ADMIN}
       PASSWORD: ${MYSQL_PASSWORD}
@@ -123,7 +123,7 @@ services:
     container_name: 'prometheus'
     build:
       context: ./requirements/bonus/prometheus
-    image: 'prometheus'
+    image: 'prometheus:inception_bonus'
     ports:
       - '9090:9090'
     networks:
@@ -138,16 +138,14 @@ volumes:
     driver_opts:
       type: none
       o: "bind"
-      # device: $HOME/data/database
-      device: /Users/shivarakii/Documents/42_coding/inception/srcs/data/database/
+      device: $HOME/data/database
   wordpress:
     name: wordpress
     driver: local
     driver_opts:
       type: none
       o: "bind"
-      # device: $HOME/data/wordpress
-      device: /Users/shivarakii/Documents/42_coding/inception/srcs/data/wordpress/
+      device: $HOME/data/wordpress
 
 networks:
   inception:
