@@ -38,10 +38,10 @@ $(NAME):
 	mkdir -p ${HOME}/data/wordpress/
 
 all: $(NAME)
-	$(COMPOSE) -f $(YML) up -d up
+	$(COMPOSE) -f $(YML) up -d up --quiet-pull --build
 	@echo "$(GREEN)-----:: success :: all containers are up ::-----$(NORMAL)"
 up:
-	$(COMPOSE) -f $(YML) up -d up
+	$(COMPOSE) -f $(YML) up -d up --quiet-pull --build
 	@echo "$(GREEN)-----:: success :: all containers are up ::-----$(NORMAL)"
 .PHONY: all up
 
