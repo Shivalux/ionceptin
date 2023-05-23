@@ -25,6 +25,7 @@ DATAV	= database
 WEBV	= wordpress
 TAG_MENDA	= inception
 TAG_BONUS	= inception_bonus
+MOUNT_PATH	= /home/sharnvon/data/
 
 NORMAL	= \033[0m
 GREEN	= \033[1;32m
@@ -46,9 +47,9 @@ console: $(NAME)
 .PHONY: console
 
 $(NAME):
-	@mkdir -p ${HOME}/data/
-	@mkdir -p ${HOME}/data/database/
-	@mkdir -p ${HOME}/data/wordpress/
+	@mkdir -p $(MOUNT_PATH)
+	@mkdir -p $(MOUNT_PATH)database/
+	@mkdir -p $(MOUNT_PATH)wordpress/
 	@echo "$(GREEN)-----:: success :: make directories ::-----$(NORMAL)"
 
 list:
@@ -74,7 +75,7 @@ down:
 .PHONY: clean down
 
 fclean: clean
-	@sudo rm -rf ${HOME}/data/
+	@sudo rm -rf $(MOUNT_PATH)
 	@echo "$(ORANGE)-----:: fclean :: all directories are deleted ::-----$(NORMAL)"
 	docker volume rm $(DATAV)
 	docker volume rm $(WEBV)

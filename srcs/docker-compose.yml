@@ -138,14 +138,14 @@ volumes:
     driver_opts:
       type: none
       o: "bind"
-      device: $HOME/data/database
+      device: /home/sharnvon/data/database
   wordpress:
     name: wordpress
     driver: local
     driver_opts:
       type: none
       o: "bind"
-      device: $HOME/data/wordpress
+      device: /home/sharnvon/data/wordpress
 
 networks:
   inception:
